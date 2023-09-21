@@ -22,3 +22,15 @@ function createGrid(rows, columns) {
 }
 
 createGrid(gridRows, gridColumns);
+
+function clearGrid() {
+  const divPixelNodeList = document.querySelectorAll(".grid-pixel");
+  const divPixelArray = Array.from(divPixelNodeList);
+
+  divPixelArray.forEach((divPixel) => {
+    divPixel.classList.remove("pixel-on");
+  });
+}
+
+const clearButton = document.querySelector("#clearGridButton");
+clearButton.addEventListener("click", clearGrid);
