@@ -1,0 +1,19 @@
+.grid-pixel {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+}
+
+.pixel-on {
+  background-color: blue;
+  color: white;
+}
+
+#changeGridButton {
+  margin-bottom: 40px;
+}
