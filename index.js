@@ -1,6 +1,9 @@
-let gridSize = 5;
+let gridSize = 30;
+let draw = true;
+let erase = false;
+let rainbow = false;
 
-const changeGridButton = document.querySelector("#changeGridButton");
+const changeGridButton = document.querySelector("#changeGridBtn");
 changeGridButton.addEventListener("click", () => {
   const userInput = prompt("Enter a new grid size:");
 
@@ -16,6 +19,22 @@ changeGridButton.addEventListener("click", () => {
 
   gridSize = parseInt(userInput);
   drawGrid(gridSize);
+});
+
+const eraserBtn = document.querySelector("#eraserBtn");
+eraserBtn.addEventListener("click", () => {
+  draw = false;
+  erase = true;
+  drawOrErase();
+  console.log("Erasing");
+});
+
+const drawBtn = document.querySelector("#drawBtn");
+drawBtn.addEventListener("click", () => {
+  draw = true;
+  erase = false;
+  drawOrErase();
+  console.log("Drawing");
 });
 
 function drawGrid(size) {
@@ -34,7 +53,7 @@ function drawGrid(size) {
 
     gridContainer.appendChild(divRow);
   }
-  turnPixelOn();
+  drawOrErase();
 }
 
 drawGrid(gridSize);
@@ -44,17 +63,44 @@ function turnPixelOn() {
   const divPixelArray = Array.from(divPixelNodeList);
 
   divPixelArray.forEach((divPixel) => {
-    divPixel.addEventListener("mouseover", (evt) => {
-      if (evt.buttons === 1) {
-        divPixel.classList.add("pixel-on");
-      }
-    });
-    divPixel.addEventListener("mousedown", (evt) => {
-      if (evt.buttons === 1) {
-        divPixel.classList.add("pixel-on");
-      }
-    });
+    if (draw === true && erase === false) {
+      divPixel.addEventListener("mouseover", (evt) => {
+        if (evt.buttons === 1) {
+          divPixel.classList.add("pixel-on");
+        }
+      });
+      divPixel.addEventListener("mousedown", (evt) => {
+        if (evt.buttons === 1) {
+          divPixel.classList.add("pixel-on");
+        }
+      });
+    }
   });
+}
+
+function turnPixelOff() {
+  const divPixelNodeList = document.querySelectorAll(".grid-pixel");
+  const divPixelArray = Array.from(divPixelNodeList);
+
+  divPixelArray.forEach((divPixel) => {
+    if (erase === true && draw === false) {
+      divPixel.addEventListener("mouseover", (evt) => {
+        if (evt.buttons === 1) {
+          divPixel.classList.remove("pixel-on");
+        }
+      });
+      divPixel.addEventListener("mousedown", (evt) => {
+        if (evt.buttons === 1) {
+          divPixel.classList.remove("pixel-on");
+        }
+      });
+    }
+  });
+}
+
+function drawOrErase() {
+  turnPixelOn();
+  turnPixelOff();
 }
 
 function clearPixels() {
@@ -66,5 +112,5 @@ function clearPixels() {
   });
 }
 
-const clearButton = document.querySelector("#clearGridButton");
+const clearButton = document.querySelector("#clearGridBtn");
 clearButton.addEventListener("click", clearPixels);

@@ -8,9 +8,19 @@
     <script src="index.js" defer></script>
   </head>
   <body>
-    <h1>Etch-a-Sketch</h1>
-    <button id="changeGridButton">Change grid size</button>
-    <button id="clearGridButton">Clear</button>
+    <div id="controls">
+      <div id="leftControls">
+        <button id="drawBtn" class="btn">Draw</button>
+        <button id="eraserBtn" class="btn">Eraser</button>
+        <button id="clearGridBtn" class="btn">Clear</button>
+      </div>
+      <h1 id="title">Etch-a-Sketch</h1>
+      <div id="rightControls">
+        <button id="colourBtn" class="btn">Colour</button>
+        <button id="raindowBtn" class="btn">Rainbow</button>
+        <button id="changeGridBtn" class="btn">Grid Size</button>
+      </div>
+    </div>
     <div id="grid-container"></div>
   </body>
 </html>
