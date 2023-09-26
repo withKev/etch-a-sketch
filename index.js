@@ -1,6 +1,6 @@
 let gridSize = 30;
-let draw = true;
-let erase = false;
+let isDrawing = true;
+let isErasing = false;
 let rainbow = false;
 
 const changeGridButton = document.querySelector("#changeGridBtn");
@@ -11,7 +11,7 @@ changeGridButton.addEventListener("click", () => {
     alert("Invalid input. Please enter a valid number.");
     return;
   } else if (userInput > 100) {
-    alert("Max number is 100");
+    alert("Max number is 100. Maximum grid size is 100 x 100");
     return;
   } else if (userInput === null) {
     return;
@@ -23,18 +23,37 @@ changeGridButton.addEventListener("click", () => {
 
 const eraserBtn = document.querySelector("#eraserBtn");
 eraserBtn.addEventListener("click", () => {
-  draw = false;
-  erase = true;
+  isDrawing = false;
+  isErasing = true;
   drawOrErase();
   console.log("Erasing");
 });
 
 const drawBtn = document.querySelector("#drawBtn");
 drawBtn.addEventListener("click", () => {
-  draw = true;
-  erase = false;
+  isDrawing = true;
+  isErasing = false;
   drawOrErase();
   console.log("Drawing");
+});
+
+const clearButton = document.querySelector("#clearGridBtn");
+clearButton.addEventListener("click", clearPixels);
+
+function clearPixels() {
+  const divPixelNodeList = document.querySelectorAll(".grid-pixel");
+  const divPixelArray = Array.from(divPixelNodeList);
+
+  divPixelArray.forEach((divPixel) => {
+    // divPixel.classList.remove("pixel-on");
+    divPixel.style.backgroundColor = "";
+  });
+  console.log("Reset Drawing");
+}
+
+const gridContainer = document.querySelector("#grid-container");
+gridContainer.addEventListener("mouseenter", () => {
+  drawOrErase();
 });
 
 function drawGrid(size) {
@@ -63,15 +82,19 @@ function turnPixelOn() {
   const divPixelArray = Array.from(divPixelNodeList);
 
   divPixelArray.forEach((divPixel) => {
-    if (draw === true && erase === false) {
+    if (isDrawing) {
       divPixel.addEventListener("mouseover", (evt) => {
         if (evt.buttons === 1) {
-          divPixel.classList.add("pixel-on");
+          //   divPixel.classList.add("pixel-on");
+          divPixel.style.backgroundColor = colour;
+          divPixel.style.transition = "background-color 0.1s ease-in";
         }
       });
       divPixel.addEventListener("mousedown", (evt) => {
         if (evt.buttons === 1) {
-          divPixel.classList.add("pixel-on");
+          //   divPixel.classList.add("pixel-on");
+          divPixel.style.backgroundColor = colour;
+          divPixel.style.transition = "background-color 0.1s ease-in";
         }
       });
     }
@@ -83,15 +106,17 @@ function turnPixelOff() {
   const divPixelArray = Array.from(divPixelNodeList);
 
   divPixelArray.forEach((divPixel) => {
-    if (erase === true && draw === false) {
+    if (isErasing) {
       divPixel.addEventListener("mouseover", (evt) => {
         if (evt.buttons === 1) {
-          divPixel.classList.remove("pixel-on");
+          //   divPixel.classList.remove("pixel-on");
+          divPixel.style.backgroundColor = "";
         }
       });
       divPixel.addEventListener("mousedown", (evt) => {
         if (evt.buttons === 1) {
-          divPixel.classList.remove("pixel-on");
+          //   divPixel.classList.remove("pixel-on");
+          divPixel.style.backgroundColor = "";
         }
       });
     }
@@ -99,18 +124,12 @@ function turnPixelOff() {
 }
 
 function drawOrErase() {
+  getColourValue();
   turnPixelOn();
   turnPixelOff();
 }
 
-function clearPixels() {
-  const divPixelNodeList = document.querySelectorAll(".grid-pixel");
-  const divPixelArray = Array.from(divPixelNodeList);
-
-  divPixelArray.forEach((divPixel) => {
-    divPixel.classList.remove("pixel-on");
-  });
+function getColourValue() {
+  colour = document.getElementById("colourPicker").value;
+  console.log(colour);
 }
-
-const clearButton = document.querySelector("#clearGridBtn");
-clearButton.addEventListener("click", clearPixels);
