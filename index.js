@@ -2,6 +2,7 @@ let gridSize = 30;
 let isDrawing = true;
 let isErasing = false;
 let rainbow = false;
+let rgbBrush = false;
 
 const changeGridButton = document.querySelector("#changeGridBtn");
 changeGridButton.addEventListener("click", () => {
@@ -33,8 +34,20 @@ const drawBtn = document.querySelector("#drawBtn");
 drawBtn.addEventListener("click", () => {
   isDrawing = true;
   isErasing = false;
+  rgbBrush = false;
   drawOrErase();
   console.log("Drawing");
+});
+
+const rainbowBtn = document.querySelector("#rainbowBtn");
+rainbowBtn.addEventListener("click", () => {
+  rgbBrush = true;
+  console.log("Rainbow brush activated");
+});
+
+const colourPicker = document.querySelector("#colourPicker");
+colourPicker.addEventListener("click", () => {
+  rgbBrush = false;
 });
 
 const clearButton = document.querySelector("#clearGridBtn");
@@ -124,12 +137,76 @@ function turnPixelOff() {
 }
 
 function drawOrErase() {
-  getColourValue();
-  turnPixelOn();
-  turnPixelOff();
+  if (rgbBrush) {
+    paintRGB();
+  } else {
+    getColourValue();
+    turnPixelOn();
+    turnPixelOff();
+  }
 }
 
 function getColourValue() {
   colour = document.getElementById("colourPicker").value;
   console.log(colour);
+}
+
+function getRandomRGB() {
+  const randomRGB = Math.floor(Math.random() * 3);
+  let r;
+  let g;
+  let b;
+
+  switch (randomRGB) {
+    case 0:
+      r = 255;
+      g = Math.floor(Math.random() * 256);
+      b = Math.floor(Math.random() * 256);
+      break;
+    case 1:
+      r = Math.floor(Math.random() * 256);
+      g = 255;
+      b = Math.floor(Math.random() * 256);
+      break;
+    case 2:
+      r = Math.floor(Math.random() * 256);
+      g = Math.floor(Math.random() * 256);
+      b = 255;
+      break;
+  }
+  //   return `rgb(${r},${g},${b})`;
+  return rgbToHex(r, g, b);
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function paintRGB() {
+  const divPixelNodeList = document.querySelectorAll(".grid-pixel");
+  const divPixelArray = Array.from(divPixelNodeList);
+
+  divPixelArray.forEach((divPixel) => {
+    if (rgbBrush) {
+      divPixel.addEventListener("mouseover", (evt) => {
+        if (evt.buttons === 1) {
+          const randomRGB = getRandomRGB();
+          divPixel.style.backgroundColor = randomRGB;
+          divPixel.style.transition = "background-color 0.1s ease-in";
+        }
+      });
+      divPixel.addEventListener("mousedown", (evt) => {
+        if (evt.buttons === 1) {
+          const randomRGB = getRandomRGB();
+          divPixel.style.backgroundColor = randomRGB;
+          divPixel.style.transition = "background-color 0.1s ease-in";
+        }
+      });
+    }
+  });
 }
